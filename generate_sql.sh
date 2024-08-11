@@ -17,7 +17,7 @@ grep -E '^[a-zA-Z0-9_]+\.[0-9]+_[a-zA-Z0-9_]+$' "$MIGRATION_PLAN" | while read -
     migration_name=$(echo "$line" | cut -d '.' -f 2-)
 
     echo "Generating SQL for migration: ${app_label}.${migration_name}"
-    python manage.py sqlmigrate "$app_label" "${migration_name}" >> "$TEMP_OUTPUT"
+    python manage.py sqlmigrate "$app_label" "${migration_name}" | sed '/^BEGIN;/d; /^COMMIT;/d' >> "$TEMP_OUTPUT"
 done
 
 mv "$TEMP_OUTPUT" "$SQL_OUTPUT_FILE"
