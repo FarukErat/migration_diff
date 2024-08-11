@@ -2,9 +2,9 @@ stage('Create Migration Files') {
     steps {
         sh '''
             docker exec inventum_app_prod /bin/bash -c '
-                TEMP_OUTPUT=$(mktemp)
-                MIGRATION_PLAN=$(mktemp)
                 SQL_OUTPUT_FILE="migrations.sql"
+                MIGRATION_PLAN=$(mktemp)
+                TEMP_OUTPUT=$(mktemp)
 
                 python manage.py makemigrations
                 python manage.py migrate --plan > "$MIGRATION_PLAN"
