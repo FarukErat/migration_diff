@@ -2,12 +2,12 @@ stage('Create Migration Files') {
     steps {
         sh '''
             docker exec inventum_app_prod /bin/bash -c '
+                TEMP_OUTPUT=$(mktemp)
                 MIGRATION_PLAN=$(mktemp)
+                SQL_OUTPUT_FILE="migrations.sql"
+
                 python manage.py makemigrations
                 python manage.py migrate --plan > "$MIGRATION_PLAN"
-
-                SQL_OUTPUT_FILE="migrations.sql"
-                TEMP_OUTPUT=$(mktemp)
 
                 if [ ! -f "$MIGRATION_PLAN" ]; then
                     echo "Migration plan file not found!"
@@ -26,6 +26,5 @@ stage('Create Migration Files') {
                 rm "$MIGRATION_PLAN"
             '
         '''
-
     }
 }

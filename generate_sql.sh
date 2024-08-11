@@ -1,11 +1,11 @@
 #!/bin/bash
 
+SQL_OUTPUT_FILE="migrations.sql"
 MIGRATION_PLAN=$(mktemp)
+TEMP_OUTPUT=$(mktemp)
+
 python manage.py makemigrations
 python manage.py migrate --plan > "$MIGRATION_PLAN"
-
-SQL_OUTPUT_FILE="migrations.sql"
-TEMP_OUTPUT=$(mktemp)
 
 if [ ! -f "$MIGRATION_PLAN" ]; then
     echo "Migration plan file not found!"
